@@ -50,7 +50,7 @@ CButton  line3_button ;
 CButton  clear_button ;
 
 
-#define postname        "created by DrowingTools"
+#define postname        " created by DrowingTools"
 #define box1buttonname  "Box 1 button @DrowingTools"
 #define box2buttonname  "Box 2 button @DrowingTools"
 #define box3buttonname  "Box 3 button @DrowingTools"
@@ -120,6 +120,7 @@ void OnChartEvent(const int id,
       if(sparam == box1buttonname)
         {
          Print("click on",box1buttonname);
+         create_box(box1_color);
         }
       else
          if(sparam == box2buttonname)
@@ -224,3 +225,26 @@ void creat_panel()
 
   }
 //+------------------------------------------------------------------+
+void create_box(color boxcolor)
+{
+int count = ObjectsTotal(0,0,OBJ_RECTANGLE)+1;
+string scount = IntegerToString(count,3,'0');
+string newname = boxprename + scount + postname ;
+
+int firstbar = ChartGetInteger(0,CHART_VISIBLE_BARS)-10;
+MqlRates candels[]={};
+CopyRates(NULL,PERIOD_CURRENT,2,firstbar,candels);
+double p0 = (ChartGetDouble(0,CHART_PRICE_MAX)-ChartGetDouble(0,CHART_PRICE_MIN))/20 ;
+double p1 = ChartGetDouble(0,CHART_PRICE_MAX)-(p0*9);
+double p2 = ChartGetDouble(0,CHART_PRICE_MAX)-(p0*10);
+
+ObjectCreate(0,newname,OBJ_RECTANGLE,0,candels[firstbar-1].time,p1,candels[0].time,p2);
+ObjectSetInteger(0,newname,OBJPROP_COLOR,boxcolor);
+ObjectSetInteger(0,newname,OBJPROP_BACK,true);
+ObjectSetInteger(0,newname,OBJPROP_SELECTABLE,true);
+ObjectSetInteger(0,newname,OBJPROP_SELECTED,true);
+ObjectSetInteger(0,newname,OBJPROP_HIDDEN,false);
+ObjectSetInteger(0,newname,OBJPROP_FILL,true);
+
+ChartRedraw(0);
+}
