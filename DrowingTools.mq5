@@ -52,15 +52,15 @@ CButton  clear_button ;
 const datetime point2_time = D'2124.02.01 04:00:00';
 
 #define postname        " created by DrowingTools"
-#define box1buttonname  "Box 1 button @DrowingTools"
-#define box2buttonname  "Box 2 button @DrowingTools"
-#define box3buttonname  "Box 3 button @DrowingTools"
-#define line1buttonname "Line 1 button @DrowingTools"
-#define line2buttonname "Line 2 button @DrowingTools"
-#define line3buttonname "Line 3 button @DrowingTools"
-#define clearbuttonname "Clear button @DrowingTools"
-#define boxprename      "Box "
-#define lineprename     "Line "
+#define box1buttonname  "DrowingTools>> Box 1 button"
+#define box2buttonname  "DrowingTools>> Box 2 button"
+#define box3buttonname  "DrowingTools>> Box 3 button"
+#define line1buttonname "DrowingTools>> Line 1 button"
+#define line2buttonname "DrowingTools>> Line 2 button"
+#define line3buttonname "DrowingTools>> Line 3 button"
+#define clearbuttonname "DrowingTools>> Clear button"
+#define boxprename      ">>Box "
+#define lineprename     ">>Line "
 
 //+------------------------------------------------------------------+
 //| Custom indicator initialization function                         |
@@ -76,18 +76,21 @@ int OnInit()
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
-//int OnDeinit()
-//  {
-//
-//   box1_button.Destroy();
-//   box2_button.Destroy();
-//   box3_button.Destroy();
-//   line1_button.Destroy();
-//   line2_button.Destroy();
-//   line3_button.Destroy();
-//
-//   return(INIT_SUCCEEDED);
-//  }
+int OnDeinit()
+  {
+
+   box1_button.Destroy();
+   box2_button.Destroy();
+   box3_button.Destroy();
+   line1_button.Destroy();
+   line2_button.Destroy();
+   line3_button.Destroy();
+   
+   ObjectsDeleteAll(0,"DrowingTools>>");
+   ChartRedraw(0);
+
+   return(INIT_SUCCEEDED);
+  }
 //+------------------------------------------------------------------+
 //| Custom indicator iteration function                              |
 //+------------------------------------------------------------------+
@@ -120,39 +123,45 @@ void OnChartEvent(const int id,
      {
       if(sparam == box1buttonname)
         {
-         Print("click on", box1buttonname);
          create_box(box1_color);
+         box1_button.Pressed(false);
         }
       else
          if(sparam == box2buttonname)
            {
-            Print("click on", box2buttonname);
+            create_box(box2_color);
+            box2_button.Pressed(false);
            }
          else
             if(sparam == box3buttonname)
               {
-               Print("click on", box3buttonname);
+               create_box(box3_color);
+               box3_button.Pressed(false);
               }
             else
                if(sparam == line1buttonname)
                  {
-                  Print("click on", line1buttonname);
                   creat_line(line1_color,line1_width);
+                  line1_button.Pressed(false);
                  }
                else
                   if(sparam == line2buttonname)
                     {
-                     Print("click on", line2buttonname);
+                     creat_line(line2_color,line2_width);
+                     line2_button.Pressed(false);
                     }
                   else
                      if(sparam == line3buttonname)
                        {
-                        Print("click on", line3buttonname);
+                        creat_line(line3_color,line3_width);
+                        line3_button.Pressed(false);
                        }
                      else
                         if(sparam == clearbuttonname)
                           {
-                           Print("click on", clearbuttonname);
+                           clear_chart();
+                           clear_button.Pressed(false);
+                           
                           }
 
      }
@@ -224,7 +233,8 @@ void creat_panel()
    clear_button.Width(button_width);
    clear_button.Height(button_height);
    clear_button.Pressed(false);
-
+   
+   ChartRedraw(0);
   }
 //+------------------------------------------------------------------+
 void create_box(color boxcolor)
@@ -235,7 +245,7 @@ void create_box(color boxcolor)
    string newname = boxprename + scount + postname ;
 
 //get candels specifics for find tow datetime
-   int firstbar = ChartGetInteger(0, CHART_VISIBLE_BARS) - 10;
+   int firstbar = MathFloor(ChartGetInteger(0, CHART_VISIBLE_BARS) * 0.7) ;
    MqlRates candels[] = {};
    CopyRates(NULL, PERIOD_CURRENT, 2, firstbar, candels);
 
@@ -287,3 +297,9 @@ void creat_line(color linecolor, int widht)
 
   }
 //+------------------------------------------------------------------+
+
+void clear_chart()
+{
+ObjectsDeleteAll(0,">>");
+ChartRedraw(0);
+}
