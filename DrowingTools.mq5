@@ -1,11 +1,10 @@
 //+------------------------------------------------------------------+
 //|                                                 DrawingTools.mq5 |
 //|                                         Mohammad hossein Rabbani |
-//|                                                                  |
 //+------------------------------------------------------------------+
 #property copyright "Mohammad hossein Rabbani"
-#property link      ""
-#property version   "2.00"
+#property link      "mhr345@yahoo.com"
+#property version   "1.01"
 #property indicator_chart_window
 
 #include <Controls\Button.mqh>
@@ -28,13 +27,13 @@ input int   txt_size       = 7   ;           // Font size
 
 const int y_b1 = y_margin ;
 const int y_b2 = y_b1 + button_height + 1 ;
-const int y_b3 = y_b2 + button_height + 1 ; ;
+const int y_b3 = y_b2 + button_height + 1 ; 
 
-const int y_b4 = y_b3 + button_height + 10 ; ;
-const int y_b5 = y_b4 + button_height + 1 ; ;
-const int y_b6 = y_b5 + button_height + 1 ; ;
+const int y_b4 = y_b3 + button_height + 10 ;
+const int y_b5 = y_b4 + button_height + 1 ;
+const int y_b6 = y_b5 + button_height + 1 ;
 
-const int y_b7 = y_b6 + button_height + 10 ; ;
+const int y_b7 = y_b6 + button_height + 10 ;
 
 color txt_color = ChartGetInteger(0, CHART_COLOR_BACKGROUND);
 
@@ -63,11 +62,11 @@ const datetime point2_time = D'2124.02.01 04:00:00';
 //| Custom indicator initialization function                         |
 //+------------------------------------------------------------------+
 int OnInit()
-  {
+{
    creat_panel();
    return(INIT_SUCCEEDED);
-   
-  }
+
+}
 
 //+------------------------------------------------------------------+
 //| Custom indicator iteration function                              |
@@ -82,12 +81,12 @@ int OnCalculate(const int rates_total,
                 const long &tick_volume[],
                 const long &volume[],
                 const int &spread[])
-  {
+{
 //---
 
 //--- return value of prev_calculated for next call
    return(rates_total);
-  }
+}
 //+------------------------------------------------------------------+
 //| ChartEvent function                                              |
 //+------------------------------------------------------------------+
@@ -95,7 +94,7 @@ void OnChartEvent(const int id,
                   const long &lparam,
                   const double &dparam,
                   const string &sparam)
-  {
+{
    if(id == CHARTEVENT_OBJECT_CLICK)
      {
       if(sparam == box1buttonname)
@@ -103,58 +102,51 @@ void OnChartEvent(const int id,
          create_box(box1_color);
          box1_button.Pressed(false);
         }
-      else
-         if(sparam == box2buttonname)
-           {
-            create_box(box2_color);
-            box2_button.Pressed(false);
-           }
-         else
-            if(sparam == box3buttonname)
-              {
-               create_box(box3_color);
-               box3_button.Pressed(false);
-              }
-            else
-               if(sparam == line1buttonname)
-                 {
-                  creat_line(line1_color, line1_width);
-                  line1_button.Pressed(false);
-                 }
-               else
-                  if(sparam == line2buttonname)
-                    {
-                     creat_line(line2_color, line2_width);
-                     line2_button.Pressed(false);
-                    }
-                  else
-                     if(sparam == line3buttonname)
-                       {
-                        creat_line(line3_color, line3_width);
-                        line3_button.Pressed(false);
-                       }
-                     else
-                        if(sparam == clearbuttonname)
-                          {
-                           clear_chart();
-                           clear_button.Pressed(false);
-
-                          }
-
-     }
-   else
-      if(id == CHARTEVENT_OBJECT_DRAG)
+      else if(sparam == box2buttonname)
         {
-         if(StringFind(sparam, lineprename, 0) == 0)
-           {
-            redraw_lines(sparam);
-           }
+         create_box(box2_color);
+         box2_button.Pressed(false);
+        }
+      else if(sparam == box3buttonname)
+        {
+         create_box(box3_color);
+         box3_button.Pressed(false);
+        }
+      else if(sparam == line1buttonname)
+        {
+         creat_line(line1_color, line1_width);
+         line1_button.Pressed(false);
+        }
+      else if(sparam == line2buttonname)
+        {
+         creat_line(line2_color, line2_width);
+         line2_button.Pressed(false);
+        }
+      else if(sparam == line3buttonname)
+        {
+         creat_line(line3_color, line3_width);
+         line3_button.Pressed(false);
+        }
+      else if(sparam == clearbuttonname)
+        {
+         clear_chart();
+         clear_button.Pressed(false);
+
         }
 
-  }
+     }
+   else if(id == CHARTEVENT_OBJECT_DRAG)
+     {
+      if(StringFind(sparam, lineprename, 0) == 0)
+        {
+         redraw_lines(sparam);
+        }
+     }
+}
+
 //+------------------------------------------------------------------+
 void creat_panel()
-  {
+{
 
    box1_button.Create(0, box1buttonname, 0, x_margin, y_b1, x_margin, y_margin);
    box1_button.Text("B");
@@ -220,10 +212,11 @@ void creat_panel()
    clear_button.Pressed(false);
 
    ChartRedraw(0);
-  }
+}
+
 //+------------------------------------------------------------------+
 void create_box(color boxcolor)
-  {
+{
 // make a new name for new box
    int count = ObjectsTotal(0, 0, OBJ_RECTANGLE) + 1;
    string scount = IntegerToString(count, 0, '0');
@@ -248,13 +241,11 @@ void create_box(color boxcolor)
    ObjectSetInteger(0, newname, OBJPROP_FILL, true);
 
    ChartRedraw(0);
-  }
+}
 
 //+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
 void creat_line(color linecolor, int widht)
-  {
+{
 // make a new name for new line .
    int count = ObjectsTotal(0, 0, OBJ_TREND) + 1;
    string scount = IntegerToString(count, 0, '0');
@@ -278,27 +269,19 @@ void creat_line(color linecolor, int widht)
 
    ChartRedraw(0);
 
-  }
-//+------------------------------------------------------------------+
+}
 
-//+------------------------------------------------------------------+
-//|                                                                  |
 //+------------------------------------------------------------------+
 void clear_chart()
-  {
+{
    ObjectsDeleteAll(0, ">>");
    ChartRedraw(0);
-  }
+}
 
-//+------------------------------------------------------------------+
-//|                                                                  |
 //+------------------------------------------------------------------+
 void redraw_lines(string linename)
-  {
+{
    double newprice = NormalizeDouble(ObjectGetDouble(0, linename, OBJPROP_PRICE), Digits());
-   ObjectSetDouble(0,linename,OBJPROP_PRICE,1,newprice);
+   ObjectSetDouble(0, linename, OBJPROP_PRICE, 1, newprice);
    ChartRedraw(0);
-  }
-//+------------------------------------------------------------------+
-
-//+------------------------------------------------------------------+
+}
