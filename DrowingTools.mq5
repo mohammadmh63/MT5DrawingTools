@@ -5,29 +5,26 @@
 //+------------------------------------------------------------------+
 #property copyright "Mohammad hossein Rabbani"
 #property link      ""
-#property version   "1.00"
+#property version   "2.00"
 #property indicator_chart_window
 
 #include <Controls\Button.mqh>
 #include <Controls\Panel.mqh>
-#include <ChartObjects\ChartObjectsLines.mqh>
-#include <ChartObjects\ChartObjectsShapes.mqh>
 
-
-input color box1_color  = clrBlack ;   // Box 1 color
-input color box2_color  = clrBlack ;   // Box 2 color
-input color box3_color  = clrBlack ;   // Box 3 color
-input color line1_color = clrAqua ;    // Line 1 color
-input int   line1_width = 5 ;          // Line 1 width
-input color line2_color = clrAqua ;    // Line 2 color
-input int   line2_width = 4 ;          // Line 2 width
-input color line3_color = clrAqua ;    // Line 3 color
-input int   line3_width = 3 ;          // Line 3 width
-input int   x_margin    = 3 ;          // Horizental margin
-input int   y_margin    = 200 ;        // Vertical margin
-input int   button_width = 15 ;        // Buttons width
-input int   button_height = 14 ;       // Buttons high
-input int   txt_size    = 7   ;        // Font size
+input color box1_color     = clrBlue ;       // Box 1 color
+input color box2_color     = clrOrangeRed ;  // Box 2 color
+input color box3_color     = clrYellow ;     // Box 3 color
+input color line1_color    = clrViolet ;     // Line 1 color
+input int   line1_width    = 3 ;             // Line 1 width
+input color line2_color    = clrMagenta ;    // Line 2 color
+input int   line2_width    = 3 ;             // Line 2 width
+input color line3_color    = clrPink ;       // Line 3 color
+input int   line3_width    = 2 ;             // Line 3 width
+input int   x_margin       = 3 ;             // Horizental margin
+input int   y_margin       = 200 ;           // Vertical margin
+input int   button_width   = 15 ;            // Buttons width
+input int   button_height  = 14 ;            // Buttons high
+input int   txt_size       = 7   ;           // Font size
 
 const int y_b1 = y_margin ;
 const int y_b2 = y_b1 + button_height + 1 ;
