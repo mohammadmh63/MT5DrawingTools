@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//|                                                 DrowingTools.mq5 |
+//|                                                 DrawingTools.mq5 |
 //|                                         Mohammad hossein Rabbani |
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -14,8 +14,8 @@
 input color box1_color     = clrBlue ;       // Box 1 color
 input color box2_color     = clrOrangeRed ;  // Box 2 color
 input color box3_color     = clrYellow ;     // Box 3 color
-input color line1_color    = clrViolet ;     // Line 1 color
-input int   line1_width    = 3 ;             // Line 1 width
+input color line1_color    = clrPurple ;     // Line 1 color
+input int   line1_width    = 4 ;             // Line 1 width
 input color line2_color    = clrMagenta ;    // Line 2 color
 input int   line2_width    = 3 ;             // Line 2 width
 input color line3_color    = clrPink ;       // Line 3 color
@@ -64,10 +64,9 @@ const datetime point2_time = D'2124.02.01 04:00:00';
 //+------------------------------------------------------------------+
 int OnInit()
   {
-//--- indicator buffers mapping
    creat_panel();
-//---
    return(INIT_SUCCEEDED);
+   
   }
 
 //+------------------------------------------------------------------+
@@ -97,7 +96,6 @@ void OnChartEvent(const int id,
                   const double &dparam,
                   const string &sparam)
   {
-//---
    if(id == CHARTEVENT_OBJECT_CLICK)
      {
       if(sparam == box1buttonname)
@@ -120,19 +118,19 @@ void OnChartEvent(const int id,
             else
                if(sparam == line1buttonname)
                  {
-                  creat_line(line1_color,line1_width);
+                  creat_line(line1_color, line1_width);
                   line1_button.Pressed(false);
                  }
                else
                   if(sparam == line2buttonname)
                     {
-                     creat_line(line2_color,line2_width);
+                     creat_line(line2_color, line2_width);
                      line2_button.Pressed(false);
                     }
                   else
                      if(sparam == line3buttonname)
                        {
-                        creat_line(line3_color,line3_width);
+                        creat_line(line3_color, line3_width);
                         line3_button.Pressed(false);
                        }
                      else
@@ -140,10 +138,18 @@ void OnChartEvent(const int id,
                           {
                            clear_chart();
                            clear_button.Pressed(false);
-                           
+
                           }
 
      }
+   else
+      if(id == CHARTEVENT_OBJECT_DRAG)
+        {
+         if(StringFind(sparam, lineprename, 0) == 0)
+           {
+            redraw_lines(sparam);
+           }
+        }
 
   }
 //+------------------------------------------------------------------+
@@ -212,7 +218,7 @@ void creat_panel()
    clear_button.Width(button_width);
    clear_button.Height(button_height);
    clear_button.Pressed(false);
-   
+
    ChartRedraw(0);
   }
 //+------------------------------------------------------------------+
@@ -244,8 +250,6 @@ void create_box(color boxcolor)
    ChartRedraw(0);
   }
 
-//
-
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -271,14 +275,30 @@ void creat_line(color linecolor, int widht)
    ObjectSetInteger(0, newname, OBJPROP_SELECTED, true);
    ObjectSetInteger(0, newname, OBJPROP_HIDDEN, false);
    ObjectSetInteger(0, newname, OBJPROP_WIDTH, widht);
-   
+
    ChartRedraw(0);
 
   }
 //+------------------------------------------------------------------+
 
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
 void clear_chart()
-{
-ObjectsDeleteAll(0,">>");
-ChartRedraw(0);
-}
+  {
+   ObjectsDeleteAll(0, ">>");
+   ChartRedraw(0);
+  }
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void redraw_lines(string linename)
+  {
+   double newprice = NormalizeDouble(ObjectGetDouble(0, linename, OBJPROP_PRICE), Digits());
+   ObjectSetDouble(0,linename,OBJPROP_PRICE,1,newprice);
+   ChartRedraw(0);
+  }
+//+------------------------------------------------------------------+
+
+//+------------------------------------------------------------------+
