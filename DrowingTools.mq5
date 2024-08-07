@@ -49,6 +49,7 @@ CButton  line2_button ;
 CButton  line3_button ;
 CButton  clear_button ;
 
+const datetime point2_time = D'2124.02.01 04:00:00';
 
 #define postname        " created by DrowingTools"
 #define box1buttonname  "Box 1 button @DrowingTools"
@@ -75,18 +76,18 @@ int OnInit()
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
-int OnDeinit()
-  {
-
-   box1_button.Destroy();
-   box2_button.Destroy();
-   box3_button.Destroy();
-   line1_button.Destroy();
-   line2_button.Destroy();
-   line3_button.Destroy();
-
-   return(INIT_SUCCEEDED);
-  }
+//int OnDeinit()
+//  {
+//
+//   box1_button.Destroy();
+//   box2_button.Destroy();
+//   box3_button.Destroy();
+//   line1_button.Destroy();
+//   line2_button.Destroy();
+//   line3_button.Destroy();
+//
+//   return(INIT_SUCCEEDED);
+//  }
 //+------------------------------------------------------------------+
 //| Custom indicator iteration function                              |
 //+------------------------------------------------------------------+
@@ -119,38 +120,39 @@ void OnChartEvent(const int id,
      {
       if(sparam == box1buttonname)
         {
-         Print("click on",box1buttonname);
+         Print("click on", box1buttonname);
          create_box(box1_color);
         }
       else
          if(sparam == box2buttonname)
            {
-            Print("click on",box2buttonname);
+            Print("click on", box2buttonname);
            }
          else
             if(sparam == box3buttonname)
               {
-               Print("click on",box3buttonname);
+               Print("click on", box3buttonname);
               }
             else
                if(sparam == line1buttonname)
                  {
-                  Print("click on",line1buttonname);
+                  Print("click on", line1buttonname);
+                  creat_line(line1_color,line1_width);
                  }
                else
                   if(sparam == line2buttonname)
                     {
-                     Print("click on",line2buttonname);
+                     Print("click on", line2buttonname);
                     }
                   else
                      if(sparam == line3buttonname)
                        {
-                        Print("click on",line3buttonname);
+                        Print("click on", line3buttonname);
                        }
                      else
                         if(sparam == clearbuttonname)
                           {
-                           Print("click on",clearbuttonname);
+                           Print("click on", clearbuttonname);
                           }
 
      }
@@ -226,25 +228,62 @@ void creat_panel()
   }
 //+------------------------------------------------------------------+
 void create_box(color boxcolor)
-{
-int count = ObjectsTotal(0,0,OBJ_RECTANGLE)+1;
-string scount = IntegerToString(count,3,'0');
-string newname = boxprename + scount + postname ;
+  {
+// make a new name for new box
+   int count = ObjectsTotal(0, 0, OBJ_RECTANGLE) + 1;
+   string scount = IntegerToString(count, 0, '0');
+   string newname = boxprename + scount + postname ;
 
-int firstbar = ChartGetInteger(0,CHART_VISIBLE_BARS)-10;
-MqlRates candels[]={};
-CopyRates(NULL,PERIOD_CURRENT,2,firstbar,candels);
-double p0 = (ChartGetDouble(0,CHART_PRICE_MAX)-ChartGetDouble(0,CHART_PRICE_MIN))/20 ;
-double p1 = ChartGetDouble(0,CHART_PRICE_MAX)-(p0*9);
-double p2 = ChartGetDouble(0,CHART_PRICE_MAX)-(p0*10);
+//get candels specifics for find tow datetime
+   int firstbar = ChartGetInteger(0, CHART_VISIBLE_BARS) - 10;
+   MqlRates candels[] = {};
+   CopyRates(NULL, PERIOD_CURRENT, 2, firstbar, candels);
 
-ObjectCreate(0,newname,OBJ_RECTANGLE,0,candels[firstbar-1].time,p1,candels[0].time,p2);
-ObjectSetInteger(0,newname,OBJPROP_COLOR,boxcolor);
-ObjectSetInteger(0,newname,OBJPROP_BACK,true);
-ObjectSetInteger(0,newname,OBJPROP_SELECTABLE,true);
-ObjectSetInteger(0,newname,OBJPROP_SELECTED,true);
-ObjectSetInteger(0,newname,OBJPROP_HIDDEN,false);
-ObjectSetInteger(0,newname,OBJPROP_FILL,true);
+// Find tow Price from middle of chart
+   double p0 = (ChartGetDouble(0, CHART_PRICE_MAX) - ChartGetDouble(0, CHART_PRICE_MIN)) / 20 ;
+   double p1 = ChartGetDouble(0, CHART_PRICE_MAX) - (p0 * 9);
+   double p2 = ChartGetDouble(0, CHART_PRICE_MAX) - (p0 * 10);
 
-ChartRedraw(0);
-}
+   ObjectCreate(0, newname, OBJ_RECTANGLE, 0, candels[firstbar - 1].time, p1, candels[0].time, p2);
+   ObjectSetInteger(0, newname, OBJPROP_COLOR, boxcolor);
+   ObjectSetInteger(0, newname, OBJPROP_BACK, true);
+   ObjectSetInteger(0, newname, OBJPROP_SELECTABLE, true);
+   ObjectSetInteger(0, newname, OBJPROP_SELECTED, true);
+   ObjectSetInteger(0, newname, OBJPROP_HIDDEN, false);
+   ObjectSetInteger(0, newname, OBJPROP_FILL, true);
+
+   ChartRedraw(0);
+  }
+
+//
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void creat_line(color linecolor, int widht)
+  {
+// make a new name for new line .
+   int count = ObjectsTotal(0, 0, OBJ_TREND) + 1;
+   string scount = IntegerToString(count, 0, '0');
+   string newname = lineprename + scount + postname ;
+
+// Find a candle in the middle of the chart
+   MqlRates candels[] = {};
+   int firstbar = MathFloor(ChartGetInteger(0, CHART_VISIBLE_BARS) / 3);
+   CopyRates(NULL, PERIOD_CURRENT, firstbar - 1, 2, candels);
+
+// Find middle price in the chart
+   double pr = (ChartGetDouble(0, CHART_PRICE_MAX) + ChartGetDouble(0, CHART_PRICE_MIN)) / 2 ;
+
+   ObjectCreate(0, newname, OBJ_TREND, 0, candels[0].time, pr, point2_time, pr);
+   ObjectSetInteger(0, newname, OBJPROP_COLOR, linecolor);
+   ObjectSetInteger(0, newname, OBJPROP_BACK, true);
+   ObjectSetInteger(0, newname, OBJPROP_SELECTABLE, true);
+   ObjectSetInteger(0, newname, OBJPROP_SELECTED, true);
+   ObjectSetInteger(0, newname, OBJPROP_HIDDEN, false);
+   ObjectSetInteger(0, newname, OBJPROP_WIDTH, widht);
+   
+   ChartRedraw(0);
+
+  }
+//+------------------------------------------------------------------+
