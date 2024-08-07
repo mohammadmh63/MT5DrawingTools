@@ -74,24 +74,6 @@ int OnInit()
   }
 
 //+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-int OnDeinit()
-  {
-
-   box1_button.Destroy();
-   box2_button.Destroy();
-   box3_button.Destroy();
-   line1_button.Destroy();
-   line2_button.Destroy();
-   line3_button.Destroy();
-   
-   ObjectsDeleteAll(0,"DrowingTools>>");
-   ChartRedraw(0);
-
-   return(INIT_SUCCEEDED);
-  }
-//+------------------------------------------------------------------+
 //| Custom indicator iteration function                              |
 //+------------------------------------------------------------------+
 int OnCalculate(const int rates_total,
