@@ -27,7 +27,7 @@ input int   txt_size       = 7   ;           // Font size
 
 const int y_b1 = y_margin ;
 const int y_b2 = y_b1 + button_height + 1 ;
-const int y_b3 = y_b2 + button_height + 1 ; 
+const int y_b3 = y_b2 + button_height + 1 ;
 
 const int y_b4 = y_b3 + button_height + 10 ;
 const int y_b5 = y_b4 + button_height + 1 ;
@@ -47,7 +47,7 @@ CButton  clear_button ;
 
 const datetime point2_time = D'2124.02.01 04:00:00';
 
-#define postname        " created by DrowingTools"
+#define postname        " created by DrowingTools at: "
 #define box1buttonname  "DrowingTools>> Box 1 button"
 #define box2buttonname  "DrowingTools>> Box 2 button"
 #define box3buttonname  "DrowingTools>> Box 3 button"
@@ -65,7 +65,6 @@ int OnInit()
 {
    creat_panel();
    return(INIT_SUCCEEDED);
-
 }
 
 //+------------------------------------------------------------------+
@@ -147,7 +146,6 @@ void OnChartEvent(const int id,
 //+------------------------------------------------------------------+
 void creat_panel()
 {
-
    box1_button.Create(0, box1buttonname, 0, x_margin, y_b1, x_margin, y_margin);
    box1_button.Text("B");
    box1_button.FontSize(txt_size);
@@ -220,8 +218,10 @@ void create_box(color boxcolor)
 // make a new name for new box
    int count = ObjectsTotal(0, 0, OBJ_RECTANGLE) + 1;
    string scount = IntegerToString(count, 0, '0');
-   string newname = boxprename + scount + postname ;
-
+   datetime current = TimeLocal();
+   string newname = boxprename + scount + postname + TimeToString(current, TIME_DATE)
+                    + " " + TimeToString(current, TIME_SECONDS) ;
+                    
 //get candels specifics for find tow datetime
    int firstbar = MathFloor(ChartGetInteger(0, CHART_VISIBLE_BARS) * 0.7) ;
    MqlRates candels[] = {};
@@ -249,7 +249,9 @@ void creat_line(color linecolor, int widht)
 // make a new name for new line .
    int count = ObjectsTotal(0, 0, OBJ_TREND) + 1;
    string scount = IntegerToString(count, 0, '0');
-   string newname = lineprename + scount + postname ;
+   datetime current = TimeLocal();
+   string newname = lineprename + scount + postname + TimeToString(current, TIME_DATE)
+                    + " " + TimeToString(current, TIME_SECONDS) ;
 
 // Find a candle in the middle of the chart
    MqlRates candels[] = {};
@@ -285,3 +287,4 @@ void redraw_lines(string linename)
    ObjectSetDouble(0, linename, OBJPROP_PRICE, 1, newprice);
    ChartRedraw(0);
 }
+//+------------------------------------------------------------------+
